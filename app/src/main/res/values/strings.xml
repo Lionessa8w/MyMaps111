@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyMaps111</string>
+    <string name="phone_number">Введите номер телефона</string>
+    <string name="sms_text">Получить SMS-код</string>
+    <string name="hint_sms_code">Введите SMS-код</string>
+    <string name="button_sms_code">Авторизоваться</string>
 </resources>

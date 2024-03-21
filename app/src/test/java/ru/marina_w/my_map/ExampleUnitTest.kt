@@ -1,4 +1,4 @@
-package com.example.mymaps111
+package ru.marina_w.my_map
 
 import org.junit.Test
 

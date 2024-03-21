@@ -1,4 +1,4 @@
-package com.example.mymaps111
+package ru.marina_w.my_map
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
