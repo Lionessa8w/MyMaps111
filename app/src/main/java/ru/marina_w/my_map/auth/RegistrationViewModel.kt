@@ -30,14 +30,23 @@ class RegistrationViewModel:ViewModel() {
             .setPhoneNumber("+79963813976") // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                // номер телефона пользователя успешно проверен
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                     Log.d("checkResult", "onVerificationCompleted: $credential")
                     signInWithPhoneAuthCredential(credential)
                 }
+                //Этот метод вызывается в ответ на недействительный запрос проверки,
+                //например запрос, в котором указан неверный номер телефона или код проверки.
 
                 override fun onVerificationFailed(e: FirebaseException) {
                     Log.d("checkResult", "onVerificationFailed: $e")
                 }
+                //Этот метод вызывается после отправки кода подтверждения по SMS на указанный номер телефона.
+                //
+                //При вызове этого метода большинство приложений отображают
+                // пользовательский интерфейс,
+                // предлагающий пользователю ввести код подтверждения из SMS-сообщения.
+                // (В то же время автоматическая проверка может выполняться в фоновом режиме.)
 
                 override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
                     super.onCodeSent(verificationId, token)
@@ -51,6 +60,7 @@ class RegistrationViewModel:ViewModel() {
         //проверкa номера телефона пользователя
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
+    //войти в систему с учетными данными для аутентификации телефона
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -69,6 +79,13 @@ class RegistrationViewModel:ViewModel() {
                 }
             }
     }
+    //подтвердить номер телефона с помощью кода
+    private fun verifyPhoneNumberWithCode(verificationId: String?, code: String) {
+        // [START verify_with_code]
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        // [END verify_with_code]
+    }
+
 
 
 
