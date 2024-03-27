@@ -8,27 +8,33 @@ class UserUseCase private constructor() {
     private var smsCallback: SmsCallback? = null
     private var numberPhoneCallback: NumberPhoneCallback? = null
 
-    private fun sendCode(code: String){
+    fun sendCode(code: String) {
         return repository.sentSmsCode(code, smsCallback)
     }
-    private fun fallNumberPhone(): AuthNumberPhoneResponseState.Error{
+
+    fun fallNumberPhone(): AuthNumberPhoneResponseState.Error {
         return AuthNumberPhoneResponseState.Error("")
     }
 
-    private fun installCallbackNumberPhone(callbackPhone: NumberPhoneCallback) {
-         numberPhoneCallback = callbackPhone
+    fun addNumberPhoneCallback(callback: NumberPhoneCallback){
+        numberPhoneCallback=callback
     }
 
-    private fun deleteCallbackNumberPhone() {
-         numberPhoneCallback = null
+    fun installCallbackNumberPhone(callbackPhone: String) {
+        val callback = numberPhoneCallback ?: return
+        return repository.sendFonNumber(callbackPhone, callback)
+    }
+
+    fun deleteCallbackNumberPhone() {
+        numberPhoneCallback = null
 
     }
 
-    private fun installCallbackSms(callbackSMS: SmsCallback) {
+    fun installCallbackSms(callbackSMS: SmsCallback) {
         smsCallback = callbackSMS
     }
 
-    private fun deleteCallbackSms() {
+    fun deleteCallbackSms() {
         smsCallback = null
     }
 

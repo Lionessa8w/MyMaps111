@@ -13,36 +13,53 @@ private const val TAG = "RegistrationViewModel"
 class RegistrationPhoneViewModel : ViewModel() {
 
     private val useCase = UserUseCase.getInstance()
-    private val _sharedNumberPhoneViewModel = MutableSharedFlow<ActionNumberPhone>()
-    val sharedNumberPhoneViewModel = _sharedNumberPhoneViewModel.asSharedFlow()
+    private val _actionFlow = MutableSharedFlow<ActionNumberPhone>()
+    val actionFlow = _actionFlow.asSharedFlow()
+    private val numberPhoneCallback = object : NumberPhoneCallback {
+        override fun setResultNumberPhoneResponseState(state: AuthNumberPhoneResponseState) {
+            viewModelScope.launch {
+                when (state) {
+                    is AuthNumberPhoneResponseState.Error -> {
+                        _actionFlow.emit(ActionNumberPhone.ErrorNumberPhone(state.message))
+                    }
+
+                    is AuthNumberPhoneResponseState.Success -> {
+                        _actionFlow.emit(ActionNumberPhone.NumberPhoneSuccessAction())
+                    }
+                }
+            }
+        }
+
+    }
 
     private var currentPhoneNumber: String? = null
 
     private val coroutineExceptionHandler =
         CoroutineExceptionHandler { coroutineContext, throwable ->
-            viewModelScope.launch { _sharedNumberPhoneViewModel.emit(
-                ActionNumberPhone.ErrorNumberPhone(
-                    throwable.localizedMessage ?: throwable.message ?: ""
+            viewModelScope.launch {
+                _actionFlow.emit(
+                    ActionNumberPhone.ErrorNumberPhone(
+                        throwable.localizedMessage ?: throwable.message ?: ""
+                    )
                 )
-            ) }
-
-
+            }
         }
+
+    fun installCallbackNumberPhone(callbackPhone: String) {
+        return useCase.installCallbackNumberPhone(callbackPhone)
+    }
 
 
     init {
-        getUserNumberPhone()
+        useCase.addNumberPhoneCallback(numberPhoneCallback)
     }
 
     fun getUserNumberPhone(): String {
-        return currentPhoneNumber?:""
-
-
+        return currentPhoneNumber ?: ""
     }
 
-    fun setCurrentNumber(number:String){
-        currentPhoneNumber=number
-
+    fun setCurrentNumber(number: String) {
+        currentPhoneNumber = number
     }
 
 }
