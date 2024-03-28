@@ -9,13 +9,17 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import ru.marina_w.my_map.auth.AuthorizationViewModel
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import ru.marina_w.my_map.auth.ActionSMS
+import ru.marina_w.my_map.auth.SmsAuthorizationViewModel
 
 const val SMS_CODE = 5
 
 class AuthorizationFragment : Fragment() {
 
-    private val smsViewModel= AuthorizationViewModel()
+    private val smsViewModel= SmsAuthorizationViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -29,16 +33,43 @@ class AuthorizationFragment : Fragment() {
         smsEditText.setText(smsViewModel.getSmsCode())
 
         smsEditText.doOnTextChanged { text, start, before, count ->
-            smsButton.isEnabled = (text?.length ?: 0) > NUMBER_LENGTH
-            smsButton.isClickable = (text?.length ?: 0) > NUMBER_LENGTH
+            smsButton.isEnabled = (text?.length ?: 0) > SMS_CODE
+            smsButton.isClickable = (text?.length ?: 0) > SMS_CODE
             smsViewModel.setCurrentSms(text.toString())
 
         }
 
         smsButton.setOnClickListener {
             Log.d("checkResult", "onCreateView: is Work")
+            sendSmsCode(smsEditText.text.toString())
 
         }
+        lifecycleScope.launch {
+            smsViewModel.actionFlowSms.collect{action->
+                when(action){
+                    is ActionSMS.ErrorSMS -> {
+                        Log.d("checkResult", "onViewCreated: ${action.message}")
+                    }
+
+                    is ActionSMS.SmsSuccessAction -> {
+//                        requireActivity()
+//                            .supportFragmentManager
+//                            .beginTransaction()
+//                            .replace(
+//                                R.id.container,
+//                                AuthorizationFragment()
+//                            )
+//                            .addToBackStack(null)
+//                            .commit()
+                        //переход на новый фрагмент
+//
+                    }
+                }
+            }
+        }
+    }
+    private fun sendSmsCode(code: String) {
+        return smsViewModel.installSmsCallback(code)
     }
 
 }

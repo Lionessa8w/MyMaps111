@@ -1,7 +1,5 @@
 package ru.marina_w.my_map.auth
 
-import com.google.android.play.integrity.internal.c
-
 class UserUseCase private constructor() {
 
     private val repository = UserRepository.getInstance()
@@ -20,9 +18,9 @@ class UserUseCase private constructor() {
         numberPhoneCallback=callback
     }
 
-    fun installCallbackNumberPhone(callbackPhone: String) {
+    fun installCallbackNumberPhone(numberPhone: String) {
         val callback = numberPhoneCallback ?: return
-        return repository.sendFonNumber(callbackPhone, callback)
+        return repository.sendFonNumber(numberPhone, callback)
     }
 
     fun deleteCallbackNumberPhone() {
@@ -30,13 +28,14 @@ class UserUseCase private constructor() {
 
     }
 
-    fun installCallbackSms(callbackSMS: SmsCallback) {
+    fun addSmsCallback(callbackSMS: SmsCallback) {
         smsCallback = callbackSMS
     }
 
     fun deleteCallbackSms() {
         smsCallback = null
     }
+
 
 
     companion object {

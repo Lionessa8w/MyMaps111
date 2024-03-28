@@ -45,8 +45,8 @@ class RegistrationPhoneViewModel : ViewModel() {
             }
         }
 
-    fun installCallbackNumberPhone(callbackPhone: String) {
-        return useCase.installCallbackNumberPhone(callbackPhone)
+    fun installCallbackNumberPhone(numberPhone: String) {
+        return useCase.installCallbackNumberPhone(numberPhone)
     }
 
 

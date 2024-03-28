@@ -9,12 +9,16 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.auth
 import java.util.concurrent.TimeUnit
+import ru.marina_w.my_map.room.BdHolder
+
 
 private const val TAG= "UserRepository"
 class UserRepository private constructor() {
     private var activity: Activity? = null
     private val firebaseAuth = Firebase.auth
     private var storedVerificationId: String? = ""
+    private val userListDao = BdHolder.getInstance().getDatabase().userListDao()
+
 
 
     fun bind(activity: Activity) {
@@ -24,9 +28,9 @@ class UserRepository private constructor() {
     fun realise() {
         activity = null
     }
-    fun sendFonNumber(phone:String, callback: NumberPhoneCallback){
+    fun sendFonNumber(numberPhone:String, callback: NumberPhoneCallback){
         val options = PhoneAuthOptions.newBuilder(firebaseAuth)
-            .setPhoneNumber(phone) // Phone number to verify
+            .setPhoneNumber(numberPhone) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 // номер телефона пользователя успешно проверен
@@ -57,7 +61,7 @@ class UserRepository private constructor() {
 
                 }
 
-            }) // OnVerificationStateChangedCallbacks
+            })
             .build()
         //проверкa номера телефона пользователя
         PhoneAuthProvider.verifyPhoneNumber(options)
@@ -75,6 +79,19 @@ class UserRepository private constructor() {
                     callback?.setResultSmsCode(AuthSmsResponseState.Error(task.exception?.message ?: ""))
                 }
             }
+    }
+    //База данных
+    suspend fun addUserId(id: String){
+        userListDao.addNewUser(id)
+    }
+    suspend fun deleteUserId(id: String){
+        userListDao.deletedIdUser(id)
+    }
+    suspend fun getAllUser(){
+        userListDao.getAllUser()
+    }
+    suspend fun getNumberPhoneUser(id: String){
+        userListDao.getNumberPhoneUser(id)
     }
 
     companion object {
