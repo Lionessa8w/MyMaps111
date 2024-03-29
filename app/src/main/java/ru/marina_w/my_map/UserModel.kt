@@ -7,7 +7,7 @@ data class UserModel(
     val userName: String? =null,
     val numberPhone: String? =null,
     val userImageUrl: String?=null,
-    val userGeoPosition: Map<String?,String?> = mapOf(null to null),
+    val userGeoPosition: Map<String,String?>,
     val userPublicStatus: String?= null
 
 )

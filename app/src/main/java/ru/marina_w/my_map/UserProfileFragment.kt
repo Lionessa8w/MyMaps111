@@ -38,6 +38,15 @@ class UserProfileFragment : Fragment() {
         myProfileText.text = R.string.profile_text.toString()
         buttonMapLike.setOnClickListener {
             //открытие карты
+            requireActivity()
+                .supportFragmentManager
+                .beginTransaction()
+                .replace(
+                    R.id.container,
+                    MapFragment()
+                )
+                .addToBackStack(null)
+                .commit()
         }
         lifecycleScope.launch {
             userProfileViewModel.flowUserState.collect { state ->
@@ -45,8 +54,8 @@ class UserProfileFragment : Fragment() {
                     is UserProfileState.Error -> Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     is UserProfileState.Loading -> Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                     is UserProfileState.Success -> {
-                        nameUser.text = state.userModel.userName,
-                        numberPhoneUser.text = state.userModel.numberPhone,
+                        nameUser.text = state.userModel.userName
+                        numberPhoneUser.text = state.userModel.numberPhone
                         Glide
                             .with(requireContext())
                             .load(state.userModel.userImageUrl)
