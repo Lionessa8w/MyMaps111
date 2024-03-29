@@ -1,20 +1,24 @@
 package ru.marina_w.my_map.auth
 
+import ru.marina_w.my_map.UserModel
+import ru.marina_w.my_map.UserModelMapper
+import ru.marina_w.my_map.room.UserInfoEntity
+
 class UserProfileUseCase {
     private val repository = UserRepository.getInstance()
+    private val mapper= UserModelMapper()
     //База данных
-    suspend fun getAllUser(){
-        repository.getAllUser()
+
+    suspend fun addUser(entity: UserInfoEntity){
+        repository.addUserId(entity)
     }
-    suspend fun getNumberPhoneUser(id: String){
-        repository.getNumberPhoneUser(id)
+    suspend fun deleteUser(){
+        repository.deleteUser()
     }
-    suspend fun addUser(id: String){
-        repository.addUserId(id)
+    suspend fun getUser(): UserModel{
+        return mapper.mapUserModel(repository.getUser())
     }
-    suspend fun deleteUser(id: String){
-        repository.deleteUserId(id)
-    }
+
 
 
 }

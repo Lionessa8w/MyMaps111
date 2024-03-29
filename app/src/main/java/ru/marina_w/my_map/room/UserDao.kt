@@ -7,13 +7,16 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 @Dao
 interface UserDao {
-    // вернуть первый элемент
+
     @Query("SELECT  * FROM user_info_entity")
     fun getUser(): UserInfoEntity
 // удаление одного юзера из одного
     //убрать йди
     @Query("DELETE FROM user_info_entity WHERE id = :id")
     fun deletedIdUser(id: String)
+    //удаление всей таблицы
+    @Query("DROP TABLE user_info_entity")
+    fun deleteUserTable()
 
     @Insert(entity = UserInfoEntity::class)
     fun addNewUser(entity: UserInfoEntity)

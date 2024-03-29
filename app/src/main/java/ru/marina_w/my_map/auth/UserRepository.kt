@@ -10,15 +10,16 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.auth
 import java.util.concurrent.TimeUnit
 import ru.marina_w.my_map.room.BdHolder
+import ru.marina_w.my_map.room.UserInfoEntity
 
 
-private const val TAG= "UserRepository"
+private const val TAG = "UserRepository"
+
 class UserRepository private constructor() {
     private var activity: Activity? = null
     private val firebaseAuth = Firebase.auth
     private var storedVerificationId: String? = ""
     private val userListDao = BdHolder.getInstance().getDatabase().userListDao()
-
 
 
     fun bind(activity: Activity) {
@@ -28,7 +29,8 @@ class UserRepository private constructor() {
     fun realise() {
         activity = null
     }
-    fun sendFonNumber(numberPhone:String, callback: NumberPhoneCallback){
+
+    fun sendFonNumber(numberPhone: String, callback: NumberPhoneCallback) {
         val options = PhoneAuthOptions.newBuilder(firebaseAuth)
             .setPhoneNumber(numberPhone) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -40,9 +42,11 @@ class UserRepository private constructor() {
                 //например запрос, в котором указан неверный номер телефона или код проверки.
 
                 override fun onVerificationFailed(e: FirebaseException) {
-                    callback.setResultNumberPhoneResponseState(AuthNumberPhoneResponseState.Error(
-                        e.message ?: ""
-                    ))
+                    callback.setResultNumberPhoneResponseState(
+                        AuthNumberPhoneResponseState.Error(
+                            e.message ?: ""
+                        )
+                    )
                     Log.d("checkResult", "onVerificationFailed: $e")
                 }
                 //Этот метод вызывается после отправки кода подтверждения по SMS на указанный номер телефона.
@@ -56,7 +60,7 @@ class UserRepository private constructor() {
                     super.onCodeSent(verificationId, token)
                     callback.setResultNumberPhoneResponseState(AuthNumberPhoneResponseState.Success())
                     Log.d("checkResult", "onCodeSent:$verificationId")
-                    storedVerificationId=verificationId
+                    storedVerificationId = verificationId
 
 
                 }
@@ -66,9 +70,10 @@ class UserRepository private constructor() {
         //проверкa номера телефона пользователя
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
+
     //войти в систему с учетными данными для аутентификации телефона
     fun sentSmsCode(code: String, callback: SmsCallback?) {
-        val credential= PhoneAuthProvider.getCredential(storedVerificationId!!,code)
+        val credential = PhoneAuthProvider.getCredential(storedVerificationId!!, code)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(activity!!) { task ->
                 if (task.isSuccessful) {
@@ -80,19 +85,20 @@ class UserRepository private constructor() {
                 }
             }
     }
+
     //База данных
-    suspend fun addUserId(id: String){
-        userListDao.addNewUser(id)
+    suspend fun addUserId(entity: UserInfoEntity) {
+        userListDao.addNewUser(entity)
     }
-    suspend fun deleteUserId(id: String){
-        userListDao.deletedIdUser(id)
+
+    suspend fun deleteUser() {
+        userListDao.deleteUserTable()
     }
-    suspend fun getAllUser(){
-        userListDao.getAllUser()
+
+    suspend fun getUser(): UserInfoEntity {
+        return userListDao.getUser()
     }
-    suspend fun getNumberPhoneUser(id: String){
-        userListDao.getNumberPhoneUser(id)
-    }
+
 
     companion object {
         private var INSTANCE: UserRepository? = null
