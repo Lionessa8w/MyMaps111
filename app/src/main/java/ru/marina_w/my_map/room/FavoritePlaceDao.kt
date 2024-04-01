@@ -7,24 +7,16 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 @Dao
 interface FavoritePlaceDao {
-    @Query("SELECT  * FROM favorite_places")
-    fun getAllPlace(): List<FavoritePlace>
-    // удаление одного юзера из одного
-    //убрать йди
-    @Query("DELETE FROM favorite_places WHERE placeId = :id")
-    fun deletedPlace(id: String)
+    @Query("SELECT * FROM favorite_places")
+    fun getAllPlace(): List<FavoritePlaceEntity>
 
-    @Insert(entity = UserInfoEntity::class)
-    fun addNewUser(entity: FavoritePlace)
+    @Query("DELETE FROM favorite_places WHERE placeId = :placeId")
+    fun deletedPlace(placeId: String)
+
+    @Insert(entity = FavoritePlaceEntity::class)
+    fun addNewPlaceMap(entity: FavoritePlaceEntity)
 
 
 
 }
 
-@Database(
-    version = 1,
-    entities = [FavoritePlace::class]
-)
-abstract class AppMapDatabase : RoomDatabase() {
-    abstract fun placesListDao(): FavoritePlaceDao
-}

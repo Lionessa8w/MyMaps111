@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import java.lang.IllegalStateException
 
-class BdHolder {
+class BdUserHolder {
     private var database: AppDatabase? = null
 
     fun init(context: Context) {
@@ -22,10 +22,10 @@ class BdHolder {
     }
 
     companion object {
-        private var INSTANCE: BdHolder? = null
-        fun getInstance(): BdHolder {
+        private var INSTANCE: BdUserHolder? = null
+        fun getInstance(): BdUserHolder {
             return synchronized(this) {
-                val currentInstance = INSTANCE ?: BdHolder()
+                val currentInstance = INSTANCE ?: BdUserHolder()
                 INSTANCE = currentInstance
                 currentInstance
             }

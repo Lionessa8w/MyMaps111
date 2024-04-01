@@ -9,7 +9,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.auth
 import java.util.concurrent.TimeUnit
-import ru.marina_w.my_map.room.BdHolder
+import ru.marina_w.my_map.room.BdUserHolder
 import ru.marina_w.my_map.room.UserInfoEntity
 
 
@@ -19,7 +19,7 @@ class UserRepository private constructor() {
     private var activity: Activity? = null
     private val firebaseAuth = Firebase.auth
     private var storedVerificationId: String? = ""
-    private val userListDao = BdHolder.getInstance().getDatabase().userListDao()
+    private val userListDao = BdUserHolder.getInstance().getDatabase().userListDao()
 
 
     fun bind(activity: Activity) {
@@ -91,8 +91,8 @@ class UserRepository private constructor() {
         userListDao.addNewUser(entity)
     }
 
-    suspend fun deleteUser() {
-        userListDao.deleteUserTable()
+    suspend fun deleteUser(id: String) {
+        userListDao.deletedIdUser(id)
     }
 
     suspend fun getUser(): UserInfoEntity {

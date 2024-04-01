@@ -14,9 +14,9 @@ data class UserInfoEntity(
 )
 
 @Entity(tableName = "favorite_places")
-data class FavoritePlace(
+data class FavoritePlaceEntity(
     @PrimaryKey val placeId: String,
     @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "place_name") val placeName: String,
-    @ColumnInfo(name = "geo_position") val geoPosition: String,
+    @ColumnInfo(name = "geo_position") val geoPosition: String
 )
