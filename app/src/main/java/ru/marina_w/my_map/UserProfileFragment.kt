@@ -28,14 +28,12 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val myProfileText: TextView = view.findViewById(R.id.my_profile)
         val iconProfile: ImageView = view.findViewById(R.id.user_avatar)
         val nameUser: TextView = view.findViewById(R.id.account_name)
         val numberPhoneUser: TextView = view.findViewById(R.id.number_phone)
         val statusSong: TextView = view.findViewById(R.id.song_status)
         val buttonMapLike: Button = view.findViewById(R.id.button_map_like)
 
-        myProfileText.text = R.string.profile_text.toString()
         buttonMapLike.setOnClickListener {
             //открытие карты
             requireActivity()

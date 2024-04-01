@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
-import com.yandex.mapkit.mapview.MapView
 import ru.marina_w.my_map.databinding.FragmentMapBinding
 
 class MapFragment : Fragment() {

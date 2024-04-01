@@ -10,7 +10,6 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        MapKitFactory.initialize(this)
         MapKitFactory.setApiKey("58777d91-ee4e-4d91-a65b-2fe73bdcaae5")
 
     }

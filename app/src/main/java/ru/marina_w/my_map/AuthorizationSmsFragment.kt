@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.marina_w.my_map.auth.ActionSMS
 import ru.marina_w.my_map.auth.SmsAuthorizationViewModel
@@ -52,17 +51,17 @@ class AuthorizationFragment : Fragment() {
                     }
 
                     is ActionSMS.SmsSuccessAction -> {
-//                        requireActivity()
-//                            .supportFragmentManager
-//                            .beginTransaction()
-//                            .replace(
-//                                R.id.container,
-//                                AuthorizationFragment()
-//                            )
-//                            .addToBackStack(null)
-//                            .commit()
-                        //переход на новый фрагмент
-//
+                        requireActivity()
+                            .supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.container,
+                                UserProfileFragment()
+                            )
+                            .addToBackStack(null)
+                            .commit()
+                       Log.d("checkResult", "onViewCreated: ActionSMS.SmsSuccessAction")
+
                     }
                 }
             }

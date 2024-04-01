@@ -18,6 +18,9 @@ class UserProfileViewModel : ViewModel() {
 
     private val useCase = UserProfileUseCase()
 
+    init {
+        fetchProfile()
+    }
 
     fun fetchProfile() {
         viewModelScope.launch(Dispatchers.IO) {
