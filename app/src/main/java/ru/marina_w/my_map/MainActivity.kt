@@ -10,17 +10,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        MapKitFactory.initialize(this)
-        BdUserHolder.getInstance().init(this)
-        UserRepository.getInstance().bind(this)
         if (savedInstanceState == null) {
+            MapKitFactory.initialize(this)
+            BdUserHolder.getInstance().init(this)
+            UserRepository.getInstance().bind(this)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, RegistrationFragment()).commit()
+                .replace(R.id.container, MapFragment()).commit()
         }
     }
 
     override fun onDestroy() {
         UserRepository.getInstance().realise()
         super.onDestroy()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        MapKitFactory.getInstance().onStart()
+    }
+
+    override fun onStop() {
+        MapKitFactory.getInstance().onStop()
+        super.onStop()
     }
 }

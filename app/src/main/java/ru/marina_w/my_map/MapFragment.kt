@@ -21,7 +21,7 @@ class MapFragment : Fragment() {
     private var zoomValue: Float = 16.5f
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentMapBinding.inflate(inflater, container, false)
+        binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,20 +30,18 @@ class MapFragment : Fragment() {
     }
 
     private fun moveToStartLocation() {
-        binding.mapview.map.move(
-            CameraPosition(startLocation, zoomValue, 0.0f, 0.0f)
-        )
+//        binding.mapview.map.move(
+//            CameraPosition(startLocation, zoomValue, 0.0f, 0.0f)
+//        )
     }
 
     override fun onStart() {
         super.onStart()
-        MapKitFactory.getInstance().onStart()
-        binding.mapview.onStart()
+//        binding.mapview.onStart()
     }
 
     override fun onStop() {
-        binding.mapview.onStop()
-        MapKitFactory.getInstance().onStop()
+//        binding.mapview.onStop()
         super.onStop()
     }
 }
